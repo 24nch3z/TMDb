@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb.R
 import com.example.tmdb.data.model.Movie
+import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_movie.*
 
@@ -35,6 +36,10 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
         fun bind(movie: Movie) {
             title.text = movie.title
+
+            Picasso.get()
+                    .load("https://image.tmdb.org/t/p/w500${movie.posterPath}")
+                    .into(poster)
         }
     }
 }

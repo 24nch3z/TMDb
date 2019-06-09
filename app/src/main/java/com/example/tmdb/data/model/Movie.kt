@@ -2,6 +2,14 @@ package com.example.tmdb.data.model
 
 import com.google.gson.annotations.SerializedName
 
+
+/*
+        Постер
+        Название
+        Описание
+        Рейтинг
+        Число голосов
+ */
 data class Movie(
 
         @SerializedName("poster_path")
