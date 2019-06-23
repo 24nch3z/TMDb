@@ -9,6 +9,7 @@ import com.example.tmdb.data.model.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_movie.*
+import java.text.SimpleDateFormat
 
 class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
@@ -35,11 +36,15 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
     class MoviesViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(movie: Movie) {
-            title.text = movie.title
+            title_view.text = movie.title
+            description_view.text = movie.overview
+            rating_view.text = containerView.context.getString(R.string.item_movie_rating,
+                    movie.voteAverage.toString(), movie.voteCount.toString())
+            year_view.text = movie.releaseDate.substring(0, 4)
 
             Picasso.get()
                     .load("https://image.tmdb.org/t/p/w500${movie.posterPath}")
-                    .into(poster)
+                    .into(poster_view)
         }
     }
 }

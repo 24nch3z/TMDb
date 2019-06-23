@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TMDb</string>
+
+    <string name="item_movie_rating">Рейтинг: %1$s (%2$s)</string>
 </resources>
