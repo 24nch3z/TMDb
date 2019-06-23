@@ -10,6 +10,7 @@ import com.example.tmdb.data.model.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_movie.*
+import ru.s4nchez.logger.Logger
 
 class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
@@ -51,7 +52,9 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
             }
 
             when {
-                movie.voteAverage >= 7.0f -> rating_view.setTextColor(ContextCompat
+                movie.voteCount == 0 -> rating_view.setTextColor(ContextCompat
+                        .getColor(context, R.color.main_text_color))
+                movie.voteAverage >= 7.5f -> rating_view.setTextColor(ContextCompat
                         .getColor(context, R.color.item_movie_rating_very_good))
                 movie.voteAverage >= 5.0f -> rating_view.setTextColor(ContextCompat
                         .getColor(context, R.color.item_movie_rating_good))

@@ -15,6 +15,7 @@ interface ApiInterface {
     fun getMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
-        @Query("sort_by") sortBy: String
+        @Query("sort_by") sortBy: String,
+        @Query("page") page: Int
     ): Call<Discover>
 }

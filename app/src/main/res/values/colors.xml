@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="transparent">#00FFFFFF</color>
+    <color name="main_text_color">#67646a</color>
 
     <color name="item_movie_background">#22380066</color>
     <color name="item_movie_rating_bad">#c70000</color>
