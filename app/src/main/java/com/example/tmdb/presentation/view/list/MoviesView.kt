@@ -4,4 +4,6 @@ import com.example.tmdb.data.model.Movie
 
 interface MoviesView {
     fun setItems(items: List<Movie>)
+    fun showProgress()
+    fun hideProgress()
 }

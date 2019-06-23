@@ -46,4 +46,12 @@ class MoviesFragment : Fragment(), MoviesView {
     override fun setItems(items: List<Movie>) {
         adapter.setItems(items as ArrayList<Movie>)
     }
+
+    override fun showProgress() {
+        progress_view.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        progress_view.visibility = View.GONE
+    }
 }

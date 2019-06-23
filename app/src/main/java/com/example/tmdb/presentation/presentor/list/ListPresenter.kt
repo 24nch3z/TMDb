@@ -11,11 +11,15 @@ class ListPresenter(
 ) : BasePresenter<MoviesView>() {
 
     fun loadMovies() {
+        view?.showProgress()
         val d = moviesInteractor.getMovies()
                 .observeOn(schedulersProvider.ui())
                 .subscribe({
                     view?.setItems(it)
-                }, {})
+                    view?.hideProgress()
+                }, {
+                    view?.hideProgress()
+                })
         disposable.add(d)
     }
 }

@@ -3,4 +3,12 @@
     <color name="colorPrimary">#540099</color>
     <color name="colorPrimaryDark">#380066</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="transparent">#00FFFFFF</color>
+
+    <color name="item_movie_background">#22380066</color>
+    <color name="item_movie_rating_bad">#c70000</color>
+    <color name="item_movie_rating_medium">#db8b00</color>
+    <color name="item_movie_rating_good">#d4c202</color>
+    <color name="item_movie_rating_very_good">#008000</color>
 </resources>
