@@ -12,7 +12,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_movie.*
 import ru.s4nchez.logger.Logger
 
-class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
+class MoviesAdapter(private val clickListener: ClickListener) : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
     private var list = ArrayList<Movie>()
 
@@ -26,7 +26,7 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(clickListener, list[position])
     }
 
     fun setItems(newItems: ArrayList<Movie>) {
@@ -36,7 +36,7 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
     class MoviesViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(movie: Movie) {
+        fun bind(clickListener: ClickListener, movie: Movie) {
             val context = itemView.context
 
             title_view.text = movie.title
@@ -67,6 +67,12 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
             Picasso.get()
                     .load("https://image.tmdb.org/t/p/w500${movie.posterPath}")
                     .into(poster_view)
+
+            itemView.setOnClickListener { clickListener.onClick(movie) }
         }
+    }
+
+    interface ClickListener {
+        fun onClick(movie: Movie)
     }
 }

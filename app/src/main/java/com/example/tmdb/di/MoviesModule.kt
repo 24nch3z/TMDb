@@ -8,6 +8,7 @@ import com.example.tmdb.data.repository.MoviesRepositoryImpl
 import com.example.tmdb.domain.MoviesInteractor
 import com.example.tmdb.domain.MoviesInteractorImpl
 import com.example.tmdb.executor.SchedulersProvider
+import com.example.tmdb.presentation.presentor.details.MovieDetailsPresenter
 import com.example.tmdb.presentation.presentor.list.ListPresenter
 import dagger.Module
 import dagger.Provides
@@ -35,11 +36,18 @@ class MoviesModule {
     }
 
     @Provides
-    @Singleton
     fun provideListPresenter(
-        schedulersProvider: SchedulersProvider,
-        moviesInteractor: MoviesInteractor
+            schedulersProvider: SchedulersProvider,
+            moviesInteractor: MoviesInteractor
     ): ListPresenter {
         return ListPresenter(schedulersProvider, moviesInteractor)
+    }
+
+    @Provides
+    fun provideMovieDetailsPresenter(
+            schedulersProvider: SchedulersProvider,
+            moviesInteractor: MoviesInteractor
+    ): MovieDetailsPresenter {
+        return MovieDetailsPresenter(schedulersProvider, moviesInteractor)
     }
 }

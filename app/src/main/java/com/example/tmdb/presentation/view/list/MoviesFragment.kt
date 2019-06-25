@@ -9,10 +9,11 @@ import com.example.tmdb.App
 import com.example.tmdb.R
 import com.example.tmdb.data.model.Movie
 import com.example.tmdb.presentation.presentor.list.ListPresenter
-import kotlinx.android.synthetic.main.screen_list.*
+import com.example.tmdb.presentation.view.details.MovieDetailsFragment
+import kotlinx.android.synthetic.main.screen_movies_list.*
 import javax.inject.Inject
 
-class MoviesFragment : Fragment(), MoviesView {
+class MoviesFragment : Fragment(), MoviesView, MoviesAdapter.ClickListener {
 
     @Inject
     lateinit var presenter: ListPresenter
@@ -25,13 +26,13 @@ class MoviesFragment : Fragment(), MoviesView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.screen_list, container, false)
+        return inflater.inflate(R.layout.screen_movies_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = MoviesAdapter()
+        adapter = MoviesAdapter(this)
         recycler_view.adapter = adapter
 
         presenter.bindView(this)
@@ -53,5 +54,12 @@ class MoviesFragment : Fragment(), MoviesView {
 
     override fun hideProgress() {
         progress_view.visibility = View.GONE
+    }
+
+    override fun onClick(movie: Movie) {
+        fragmentManager?.beginTransaction()
+                ?.add(R.id.container, MovieDetailsFragment.getInstance(movie.id))
+                ?.addToBackStack(null)
+                ?.commitAllowingStateLoss()
     }
 }
