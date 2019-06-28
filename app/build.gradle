@@ -40,6 +40,7 @@ dependencies {
 
     implementation project(":mvp")
     implementation project(":logger")
+    lintChecks project(':liblint')
 
     kapt "com.google.dagger:dagger-compiler:2.21"
     kapt "com.google.dagger:dagger-android-processor:2.16"
