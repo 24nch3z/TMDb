@@ -11,14 +11,15 @@ import retrofit2.Response
 class NetworkDataSource(private val api: ApiInterface) : BaseNetworkDataSource(), DataSource {
 
     override fun getMovies(): Single<Discover> {
-        return makeRequest(api.getMovies(BuildConfig.ApiKey, "ru-RU", "popularity.desc", 2))
+        return makeRequest(api.getMovies(BuildConfig.ApiKey, "ru-RU", "popularity.desc", 1))
     }
 
     override fun getMovie(movieId: Int): Single<MovieDetails> {
-        return makeRequest(api.getMovie(movieId, BuildConfig.ApiKey))
+        return makeRequest(api.getMovie(movieId, BuildConfig.ApiKey, "ru-RU"))
     }
 
     override fun <T> handleError(response: Response<T>): Exception {
+        val d: Any? = null
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

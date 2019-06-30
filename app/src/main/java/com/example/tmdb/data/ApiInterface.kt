@@ -9,8 +9,6 @@ import retrofit2.http.Query
 
 const val BASE_URL = "https://api.themoviedb.org/3/"
 
-// https://api.themoviedb.org/3/discover/movie?api_key=1d7ec7f351cabadacfd8e9fcd338385d&language=ru-RU&sort_by=popularity.desc&page=1
-
 interface ApiInterface {
 
     @GET("discover/movie")
@@ -24,6 +22,7 @@ interface ApiInterface {
     @GET("movie/{movie_id}")
     fun getMovie(
             @Path("movie_id") movieId: Int,
-            @Query("api_key") apiKey: String
+            @Query("api_key") apiKey: String,
+            @Query("language") language: String
     ): Call<MovieDetails>
 }
