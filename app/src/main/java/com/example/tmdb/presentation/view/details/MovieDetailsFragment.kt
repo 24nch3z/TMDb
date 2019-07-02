@@ -10,6 +10,23 @@ import com.example.tmdb.R
 import com.example.tmdb.presentation.presentor.details.MovieDetailsPresenter
 import javax.inject.Inject
 
+/*
+    Постер фильма
+    Постер фильма как подложка на кинопоиске (ч\б)
+    Название
+    Дата релиза (или год)
+    Пометка для взрослых
+    Страница фильма
+    Страница на IMDB
+    Описание
+    Список производителей
+    Страны
+    Выручка
+    Статус фильма
+    Слоган
+    Оценка
+    Жанры
+ */
 class MovieDetailsFragment : Fragment(), MovieDetailsView {
 
     @Inject
