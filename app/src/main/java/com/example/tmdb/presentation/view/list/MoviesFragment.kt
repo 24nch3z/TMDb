@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb.App
 import com.example.tmdb.R
 import com.example.tmdb.data.model.Movie
@@ -34,9 +36,23 @@ class MoviesFragment : Fragment(), MoviesView, MoviesAdapter.ClickListener {
 
         adapter = MoviesAdapter(this)
         recycler_view.adapter = adapter
+        val layoutManager = recycler_view.layoutManager as LinearLayoutManager
+        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val totalItemCount = layoutManager.itemCount
+                val visibleItemCount = layoutManager.childCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                val visibleThreshold = 5
+
+                if (visibleItemCount + lastVisibleItem + visibleThreshold >= totalItemCount) {
+                    presenter.loadMore()
+                }
+            }
+        })
 
         presenter.bindView(this)
-        presenter.loadMovies()
+        presenter.refresh()
     }
 
     override fun onDestroy() {

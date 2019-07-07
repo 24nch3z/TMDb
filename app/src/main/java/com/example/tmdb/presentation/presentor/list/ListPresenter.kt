@@ -8,28 +8,32 @@ import ru.s4nchez.mvp.BasePresenter
 
 class ListPresenter(
         private val schedulersProvider: SchedulersProvider,
-        private val moviesInteractor: MoviesInteractor
-) : BasePresenter<MoviesView>(), Paginator.ViewController<Movie> {
+        private val moviesInteractor: MoviesInteractor,
+        private val moviesPaginator: MoviesPaginator<Movie>
+) : BasePresenter<MoviesView>(), MoviesPaginator.ViewController<Movie> {
 
     init {
-
+        moviesPaginator.bindViewController(this)
     }
 
-    fun loadMovies() {
+    fun refresh() {
         view?.showProgress()
-        val d = moviesInteractor.getMovies()
-                .observeOn(schedulersProvider.ui())
-                .subscribe({
-                    view?.setItems(it)
-                    view?.hideProgress()
-                }, {
-                    view?.hideProgress()
-                })
-        disposable.add(d)
+        moviesPaginator.refresh()
+    }
+
+    fun loadMore() {
+        view?.showProgress()
+        moviesPaginator.loadNewPage()
     }
 
     override fun showEmptyProgress(show: Boolean) {
-
+        view?.let {
+            if (show) {
+                it.showProgress()
+            } else {
+                it.hideProgress()
+            }
+        }
     }
 
     override fun showEmptyError(show: Boolean, error: Throwable?) {
@@ -41,7 +45,7 @@ class ListPresenter(
     }
 
     override fun showData(show: Boolean, data: List<Movie>) {
-
+        view?.let { it.setItems(data) }
     }
 
     override fun showErrorMessage(error: Throwable) {
@@ -53,6 +57,12 @@ class ListPresenter(
     }
 
     override fun showPageProgress(show: Boolean) {
-
+        view?.let {
+            if (show) {
+                it.showProgress()
+            } else {
+                it.hideProgress()
+            }
+        }
     }
 }

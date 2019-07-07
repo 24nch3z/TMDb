@@ -1,15 +1,18 @@
 package com.example.tmdb.presentation.presentor.list
 
-import io.reactivex.Single
+import android.annotation.SuppressLint
+import com.example.tmdb.domain.MoviesInteractor
+import com.example.tmdb.executor.SchedulersProvider
 import io.reactivex.disposables.Disposable
 
-class Paginator<T> {
+class MoviesPaginator<T>(
+        private val schedulersProvider: SchedulersProvider,
+        private val moviesInteractor: MoviesInteractor
+) {
 
-    private lateinit var requestFactory: (Int) -> Single<List<T>>
     private lateinit var viewController: ViewController<T>
 
-    fun init(requestFactory: (Int) -> Single<List<T>>, viewController: ViewController<T>) {
-        this.requestFactory = requestFactory
+    fun bindViewController(viewController: ViewController<T>) {
         this.viewController = viewController
     }
 
@@ -27,7 +30,7 @@ class Paginator<T> {
 
     private var currentState: State<T> = EMPTY()
     private var currentPage = 0
-    private val currentData = mutableListOf<T>()
+//    private val currentData = mutableListOf<T>()
     private var disposable: Disposable? = null
 
     fun restart() {
@@ -46,13 +49,20 @@ class Paginator<T> {
         currentState.release()
     }
 
+    @SuppressLint("CheckResult")
+    private fun loadAgain() {
+        moviesInteractor.clearMoviesCache()
+                .subscribe { loadPage(FIRST_PAGE) }
+    }
+
     private fun loadPage(page: Int) {
         disposable?.dispose()
-        disposable = requestFactory.invoke(page)
-            .subscribe(
-                { currentState.newData(it) },
-                { currentState.fail(it) }
-            )
+        disposable = moviesInteractor.getMovies(page)
+                .observeOn(schedulersProvider.ui())
+                .subscribe(
+                        { currentState.newData(it as List<T>) },
+                        { currentState.fail(it) }
+                )
     }
 
     private interface State<T> {
@@ -81,16 +91,17 @@ class Paginator<T> {
     private inner class EMPTY_PROGRESS : State<T> {
 
         override fun restart() {
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun newData(data: List<T>) {
             if (data.isNotEmpty()) {
                 currentState = DATA()
-                currentData.clear()
-                currentData.addAll(data)
+//                currentData.clear()
+//                currentData.addAll(data)
                 currentPage = FIRST_PAGE
-                viewController.showData(true, currentData)
+                viewController.showData(true, data)
                 viewController.showEmptyProgress(false)
             } else {
                 currentState = EMPTY_DATA()
@@ -117,14 +128,16 @@ class Paginator<T> {
             currentState = EMPTY_PROGRESS()
             viewController.showEmptyError(false)
             viewController.showEmptyProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun refresh() {
             currentState = EMPTY_PROGRESS()
             viewController.showEmptyError(false)
             viewController.showEmptyProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun release() {
@@ -139,14 +152,16 @@ class Paginator<T> {
             currentState = EMPTY_PROGRESS()
             viewController.showEmptyView(false)
             viewController.showEmptyProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun refresh() {
             currentState = EMPTY_PROGRESS()
             viewController.showEmptyView(false)
             viewController.showEmptyProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun release() {
@@ -161,13 +176,15 @@ class Paginator<T> {
             currentState = EMPTY_PROGRESS()
             viewController.showData(false)
             viewController.showEmptyProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun refresh() {
             currentState = REFRESH()
             viewController.showRefreshProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun loadNewPage() {
@@ -189,21 +206,22 @@ class Paginator<T> {
             viewController.showData(false)
             viewController.showRefreshProgress(false)
             viewController.showEmptyProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun newData(data: List<T>) {
             if (data.isNotEmpty()) {
                 currentState = DATA()
-                currentData.clear()
-                currentData.addAll(data)
+//                currentData.clear()
+//                currentData.addAll(data)
                 currentPage = FIRST_PAGE
                 viewController.showRefreshProgress(false)
-                viewController.showData(true, currentData)
+                viewController.showData(true, data)
             } else {
                 currentState = EMPTY_DATA()
-                currentData.clear()
-                viewController.showData(false)
+//                currentData.clear() // TODO ???
+                viewController. showData(false)
                 viewController.showRefreshProgress(false)
                 viewController.showEmptyView(true)
             }
@@ -228,16 +246,17 @@ class Paginator<T> {
             viewController.showData(false)
             viewController.showPageProgress(false)
             viewController.showEmptyProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun newData(data: List<T>) {
             if (data.isNotEmpty()) {
                 currentState = DATA()
-                currentData.addAll(data)
+//                currentData.addAll(data)
                 currentPage++
                 viewController.showPageProgress(false)
-                viewController.showData(true, currentData)
+                viewController.showData(true, data)
             } else {
                 currentState = ALL_DATA()
                 viewController.showPageProgress(false)
@@ -248,7 +267,8 @@ class Paginator<T> {
             currentState = REFRESH()
             viewController.showPageProgress(false)
             viewController.showRefreshProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun fail(error: Throwable) {
@@ -269,13 +289,15 @@ class Paginator<T> {
             currentState = EMPTY_PROGRESS()
             viewController.showData(false)
             viewController.showEmptyProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun refresh() {
             currentState = REFRESH()
             viewController.showRefreshProgress(true)
-            loadPage(FIRST_PAGE)
+//            loadPage(FIRST_PAGE)
+            loadAgain()
         }
 
         override fun release() {
