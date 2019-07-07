@@ -46,9 +46,9 @@ class MoviesAdapter(private val clickListener: ClickListener) : RecyclerView.Ada
             year_view.text = movie.releaseDate.substring(0, 4)
 
             if (adapterPosition % 2 == 0) {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_movie_background))
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_movie_background_even))
             } else {
-                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent))
+                itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.item_movie_background_odd))
             }
 
             when {

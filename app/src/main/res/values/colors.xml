@@ -7,7 +7,8 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="main_text_color">#67646a</color>
 
-    <color name="item_movie_background">#22380066</color>
+    <color name="item_movie_background_even">#FFE0D9E7</color>
+    <color name="item_movie_background_odd">#FFFFFFFF</color>
     <color name="item_movie_rating_bad">#c70000</color>
     <color name="item_movie_rating_medium">#db8b00</color>
     <color name="item_movie_rating_good">#d4c202</color>
