@@ -45,9 +45,9 @@ class MoviesFragment : Fragment(), MoviesView, MoviesAdapter.ClickListener {
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
                 val visibleThreshold = 5
 
-                if (visibleItemCount + lastVisibleItem + visibleThreshold >= totalItemCount) {
-                    presenter.loadMore()
-                }
+//                if (visibleItemCount + lastVisibleItem + visibleThreshold >= totalItemCount) {
+//                    presenter.loadMore()
+//                }
             }
         })
 

@@ -1,6 +1,7 @@
 package ru.s4nchez.mvp
 
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 abstract class BasePresenter<T> {
 
@@ -17,5 +18,9 @@ abstract class BasePresenter<T> {
     open fun removeView() {
         view = null
         disposable.clear()
+    }
+
+    fun Disposable.addToCompositeDisposable() {
+        disposable.add(this)
     }
 }
