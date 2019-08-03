@@ -7,7 +7,7 @@ import com.example.tmdb.data.datasource.NetworkMoviesDataSource
 import com.example.tmdb.data.model.Movie
 import com.example.tmdb.data.repository.MoviesRepository
 import com.example.tmdb.data.repository.MoviesRepositoryImpl
-import com.example.tmdb.data.repository.PagingDataSource
+import com.example.tmdb.presentation.presentor.list.PagingDataSource
 import com.example.tmdb.domain.MoviesInteractor
 import com.example.tmdb.domain.MoviesInteractorImpl
 import com.example.tmdb.executor.ExecutorsProvider

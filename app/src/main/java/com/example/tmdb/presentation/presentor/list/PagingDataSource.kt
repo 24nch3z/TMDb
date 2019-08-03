@@ -1,7 +1,8 @@
-package com.example.tmdb.data.repository
+package com.example.tmdb.presentation.presentor.list
 
 import androidx.paging.PositionalDataSource
 import com.example.tmdb.data.model.Movie
+import com.example.tmdb.data.repository.MoviesRepository
 import com.example.tmdb.executor.SchedulersProvider
 import com.example.tmdb.utils.applySchedulers
 import io.reactivex.Completable

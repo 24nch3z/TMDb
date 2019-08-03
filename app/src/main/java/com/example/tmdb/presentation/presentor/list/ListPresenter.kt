@@ -2,7 +2,6 @@ package com.example.tmdb.presentation.presentor.list
 
 import androidx.paging.PagedList
 import com.example.tmdb.data.model.Movie
-import com.example.tmdb.data.repository.PagingDataSource
 import com.example.tmdb.presentation.view.list.MoviesView
 import ru.s4nchez.mvp.BasePresenter
 
