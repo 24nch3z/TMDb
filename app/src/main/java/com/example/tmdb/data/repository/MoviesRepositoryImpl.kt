@@ -1,5 +1,6 @@
 package com.example.tmdb.data.repository
 
+import androidx.paging.PagedList
 import com.example.tmdb.data.datasource.MoviesDataSource
 import com.example.tmdb.data.model.Movie
 import com.example.tmdb.data.model.MovieDetails
@@ -18,14 +19,16 @@ class MoviesRepositoryImpl(
     }
 
     override fun getMovies(page: Int): Single<List<Movie>> {
-        if (page != lastPage) {
-            return networkMoviesDataSource.getMovies(page)
-                    .flatMapCompletable { memoryMoviesDataSource.putMovies(it) }
-                    .andThen(memoryMoviesDataSource.getMovies(page))
-                    .doOnSuccess { lastPage = page }
-        }
+//        if (page != lastPage) {
+//            return networkMoviesDataSource.getMovies(page)
+//                    .flatMapCompletable { memoryMoviesDataSource.putMovies(it) }
+//                    .andThen(memoryMoviesDataSource.getMovies(page))
+//                    .doOnSuccess { lastPage = page }
+//        }
+//
+//        return memoryMoviesDataSource.getMovies(page)
 
-        return memoryMoviesDataSource.getMovies(page)
+        return networkMoviesDataSource.getMovies(page)
     }
 
     override fun clearMoviesCache(): Completable {

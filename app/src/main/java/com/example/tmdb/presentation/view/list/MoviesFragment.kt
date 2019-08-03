@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb.App
@@ -52,7 +53,7 @@ class MoviesFragment : Fragment(), MoviesView, MoviesAdapter.ClickListener {
         })
 
         presenter.bindView(this)
-        presenter.refresh()
+        presenter.init()
     }
 
     override fun onDestroy() {
@@ -60,8 +61,8 @@ class MoviesFragment : Fragment(), MoviesView, MoviesAdapter.ClickListener {
         presenter.removeView()
     }
 
-    override fun setItems(items: List<Movie>) {
-        adapter.setItems(items as ArrayList<Movie>)
+    override fun setPagedList(list: PagedList<Movie>) {
+        adapter.submitList(list)
     }
 
     override fun showProgress() {

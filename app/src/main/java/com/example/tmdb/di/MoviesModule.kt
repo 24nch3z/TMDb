@@ -1,12 +1,16 @@
 package com.example.tmdb.di
 
+import androidx.paging.PagedList
 import com.example.tmdb.data.datasource.MemoryMoviesDataSource
 import com.example.tmdb.data.datasource.MoviesDataSource
 import com.example.tmdb.data.datasource.NetworkMoviesDataSource
+import com.example.tmdb.data.model.Movie
 import com.example.tmdb.data.repository.MoviesRepository
 import com.example.tmdb.data.repository.MoviesRepositoryImpl
+import com.example.tmdb.data.repository.PagingDataSource
 import com.example.tmdb.domain.MoviesInteractor
 import com.example.tmdb.domain.MoviesInteractorImpl
+import com.example.tmdb.executor.ExecutorsProvider
 import com.example.tmdb.executor.SchedulersProvider
 import com.example.tmdb.presentation.presentor.details.MovieDetailsPresenter
 import com.example.tmdb.presentation.presentor.list.ListPresenter
@@ -48,17 +52,40 @@ class MoviesModule {
 
     @Provides
     @Singleton
-    fun provideMoviesInteractor(
-            provider: SchedulersProvider,
-            moviesRepository: MoviesRepository): MoviesInteractor {
-        return MoviesInteractorImpl(provider, moviesRepository)
+    fun provideMoviesInteractor(moviesRepository: MoviesRepository): MoviesInteractor {
+        return MoviesInteractorImpl(moviesRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providePagingDataSource(
+            schedulersProvider: SchedulersProvider,
+            moviesRepository: MoviesRepository): PagingDataSource {
+        return PagingDataSource(moviesRepository, schedulersProvider)
+    }
+
+    @Provides
+    @Singleton
+    fun providePagedList(
+            pagingDataSource: PagingDataSource,
+            executorsProvider: ExecutorsProvider): PagedList<Movie> {
+        val config = PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setPageSize(20)
+                .setPrefetchDistance(5)
+                .build()
+
+        return PagedList.Builder(pagingDataSource, config)
+                .setNotifyExecutor(executorsProvider.ui())
+                .setFetchExecutor(executorsProvider.io())
+                .build()
     }
 
     @Provides
     fun provideListPresenter(
-            schedulersProvider: SchedulersProvider,
-            moviesInteractor: MoviesInteractor): ListPresenter {
-        return ListPresenter(schedulersProvider, moviesInteractor)
+            pagedList: PagedList<Movie>,
+            pagingDataSource: PagingDataSource): ListPresenter {
+        return ListPresenter(pagedList, pagingDataSource)
     }
 
     @Provides
